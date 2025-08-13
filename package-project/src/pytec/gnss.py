@@ -25,6 +25,7 @@
 #############################################################################3
 
 import os,sys,shutil
+import calendar
 
 #import sys
 import numpy as np
@@ -251,7 +252,8 @@ class gnss:
             
             if not os.path.exists(f_doy_reported):
                 dict_doy_reported = {"sat":[],"res":[]}
-                for doy in range(366):
+                n_days = 366 if calendar.isleap(rinex_year) else 365
+                for doy in range(n_days):
                     dict_doy_reported[str(doy)] = []
                 for i in range(1,33):
                     #Name of the satellite
@@ -260,7 +262,7 @@ class gnss:
                     else: sat = "G"+str(i)
                     dict_doy_reported["sat"].append(sat)
                     dict_doy_reported["res"].append(self.resolution )
-                    for doy in range(366):
+                    for doy in range(n_days):
                         dict_doy_reported[str(doy)].append(0)
                 pd.DataFrame(dict_doy_reported).to_feather(f_doy_reported)      
 
