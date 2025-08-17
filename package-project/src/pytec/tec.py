@@ -301,7 +301,7 @@ class tec:
         self.df_obs['STEC_sll'] = (lambda1*self.df_obs['L1'] - lambda2*self.df_obs['L2'])*alpha/1e16
 
         # Changing resolution
-        self.df_obs = self.df_obs.groupby("sv").resample(str(self.resolution)+"S").mean()
+        self.df_obs = self.df_obs.groupby("sv").resample(str(self.resolution)+"s").mean()
         self.df_obs.reset_index(level=["sv"],inplace=True)
 
         # Remove nan values (may be optimized)
@@ -384,8 +384,8 @@ class tec:
             #Get linear fit parameter of N right points
             A,B,max_dev,mean_dev = fit_lin(diffs[s:s+N],series[s:s+N].values)
             # Compute distance of point s and s+N+1 with fit
-            left_dev=abs(series[s-1]-A*diffs[s-1]-B) if s>0 else None
-            right_dev=abs(series[s+N]-A*diffs[s+N]-B) if s+N<len(series) else None
+            left_dev=abs(series.iloc[s-1]-A*diffs[s-1]-B) if s>0 else None
+            right_dev=abs(series.iloc[s+N]-A*diffs[s+N]-B) if s+N<len(series) else None
             list_fit_params[s]={"A":A,"B":B,"max_dev":max_dev,"left_dev":left_dev,"right_dev":right_dev}
             s+=1
 
